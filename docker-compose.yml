@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  localazuredevopsagent:
+    image: ${DOCKER_REGISTRY-}localazuredevopsagent
+    build:
+      context: .
+      dockerfile: Local Azure Devops Agent/Dockerfile
