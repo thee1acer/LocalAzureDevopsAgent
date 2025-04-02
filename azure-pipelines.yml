@@ -21,7 +21,7 @@ stages:
               packageType: "sdk"
               version: "8.x"
 
-          - script: dotnet restore
+          - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
 
           - script: dotnet build --no-restore --configuration Release
@@ -43,7 +43,7 @@ stages:
               packageType: "sdk"
               version: "8.x"
 
-          - script: dotnet restore
+          - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
 
           - script: dotnet build --no-restore --configuration Release
