@@ -2,8 +2,7 @@ trigger:
   branches:
     include:
       - master
-pool:
-  name: "Local Azure Agent"
+      - "*"
 
 stages:
   - stage: Build
@@ -11,6 +10,32 @@ stages:
     jobs:
       - job: Build
         displayName: "Restore, Build, and Test"
+        pool:
+          name: "Azure Pipelines" # Hosted agent for master
+        condition: eq(variables['Build.SourceBranchName'], 'master')
+
+        steps:
+          - task: UseDotNet@2
+            displayName: "Install .NET SDK"
+            inputs:
+              packageType: "sdk"
+              version: "8.x"
+
+          - script: dotnet restore
+            displayName: "Restore dependencies"
+
+          - script: dotnet build --no-restore --configuration Release
+            displayName: "Build"
+
+          - script: dotnet test --no-build --configuration Release --logger trx
+            displayName: "Run Tests"
+
+      - job: Build_Local
+        displayName: "Restore, Build, and Test (Local Agent)"
+        pool:
+          name: "Local Azure Agent"
+        condition: ne(variables['Build.SourceBranchName'], 'master')
+
         steps:
           - task: UseDotNet@2
             displayName: "Install .NET SDK"
@@ -31,7 +56,12 @@ stages:
     displayName: "Deploy API and SQL Server"
     dependsOn: Build
     jobs:
-      - job: Deploy
+      - job: Deploy_Prod
+        displayName: "Deploy to Production"
+        pool:
+          name: "Azure Pipelines"
+        condition: eq(variables['Build.SourceBranchName'], 'master')
+
         steps:
           - task: DockerCompose@0
             displayName: "Build and Push API and SQL Server"
@@ -42,5 +72,24 @@ stages:
               additionalImageTags: "$(Build.BuildId)"
 
           - script: |
-              docker-compose -f docker-compose.override.yml up -d
-            displayName: "Deploy API and SQL Server"
+              echo "Deploying to production"
+            displayName: "Production Deployment Step"
+
+      - job: Deploy_Local
+        displayName: "Deploy Locally"
+        pool:
+          name: "Local Azure Agent"
+        condition: ne(variables['Build.SourceBranchName'], 'master')
+
+        steps:
+          - task: DockerCompose@0
+            displayName: "Build and Push API and SQL Server"
+            inputs:
+              containerregistrytype: "Container Registry"
+              dockerComposeFile: "**/docker-compose.yml"
+              action: "Build services"
+              additionalImageTags: "$(Build.BuildId)"
+
+          - script: |
+              docker-compose up -d
+            displayName: "Deploy API and SQL Server (Local)"
