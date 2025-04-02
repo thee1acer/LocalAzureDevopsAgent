@@ -25,24 +25,5 @@ services:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
 
-  ubuntu-agent:
-    image: ubuntu:latest
-    container_name: ubuntu-agent
-    restart: always
-    volumes:
-      - .:/workspace
-      - ./docker-scripts/ubuntu-agent/install-agent.sh:/install-agent.sh
-      - agent-data:/home/ubuntu/agent
-    stdin_open: true
-    tty: true
-    environment:
-      - DEBIAN_FRONTEND=noninteractive
-      - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
-      - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
-      - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
-      - ACCEPT_EULA=Y
-    entrypoint: ["/bin/bash", "-c", "/install-agent.sh && sleep infinity"]
-    user: "root"
-
 volumes:
   agent-data:
