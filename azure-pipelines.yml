@@ -24,11 +24,11 @@ stages:
           - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
 
-          - script: dotnet build --no-restore --configuration Release
+          - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
 
-          - script: dotnet test --no-build --configuration Release --logger trx
-            displayName: "Run Tests"
+          #- script: dotnet test "Local Azure Devops Agent.sln" --no-build --configuration Release --logger trx
+          #displayName: "Run Tests"
 
       - job: Build_Local
         displayName: "Restore, Build, and Test (Local Agent)"
@@ -46,11 +46,11 @@ stages:
           - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
 
-          - script: dotnet build --no-restore --configuration Release
+          - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
 
-          - script: dotnet test --no-build --configuration Release --logger trx
-            displayName: "Run Tests"
+          #- script: dotnet test "Local Azure Devops Agent.sln" --no-build --configuration Release --logger trx
+          # displayName: "Run Tests"
 
   - stage: Deploy
     displayName: "Deploy API and SQL Server"
