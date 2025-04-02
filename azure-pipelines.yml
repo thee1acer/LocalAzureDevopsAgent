@@ -2,46 +2,45 @@ trigger:
   branches:
     include:
       - master
-
 pool:
-  name: 'Local Azure Agent'
+  name: "Local Azure Agent"
 
 stages:
-- stage: Build
-  displayName: 'Build and Test'
-  jobs:
-  - job: Build
-    displayName: 'Restore, Build, and Test'
-    steps:
-    - task: UseDotNet@2
-      displayName: 'Install .NET SDK'
-      inputs:
-        packageType: 'sdk'
-        version: '8.x'
+  - stage: Build
+    displayName: "Build and Test"
+    jobs:
+      - job: Build
+        displayName: "Restore, Build, and Test"
+        steps:
+          - task: UseDotNet@2
+            displayName: "Install .NET SDK"
+            inputs:
+              packageType: "sdk"
+              version: "8.x"
 
-    - script: dotnet restore
-      displayName: 'Restore dependencies'
+          - script: dotnet restore
+            displayName: "Restore dependencies"
 
-    - script: dotnet build --no-restore --configuration Release
-      displayName: 'Build'
+          - script: dotnet build --no-restore --configuration Release
+            displayName: "Build"
 
-    - script: dotnet test --no-build --configuration Release --logger trx
-      displayName: 'Run Tests'
+          - script: dotnet test --no-build --configuration Release --logger trx
+            displayName: "Run Tests"
 
-- stage: Deploy
-  displayName: 'Deploy API and SQL Server'
-  dependsOn: Build
-  jobs:
-  - job: Deploy
-    steps:
-    - task: DockerCompose@0
-      displayName: 'Build and Push API and SQL Server'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerComposeFile: '**/docker-compose.yml'
-        action: 'Build'
-        additionalImageTags: '$(Build.BuildId)'
+  - stage: Deploy
+    displayName: "Deploy API and SQL Server"
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        steps:
+          - task: DockerCompose@0
+            displayName: "Build and Push API and SQL Server"
+            inputs:
+              containerregistrytype: "Container Registry"
+              dockerComposeFile: "**/docker-compose.yml"
+              action: "Build services"
+              additionalImageTags: "$(Build.BuildId)"
 
-    - script: |
-        docker-compose -f docker-compose.override.yml up -d
-      displayName: 'Deploy API and SQL Server'
+          - script: |
+              docker-compose -f docker-compose.override.yml up -d
+            displayName: "Deploy API and SQL Server"
