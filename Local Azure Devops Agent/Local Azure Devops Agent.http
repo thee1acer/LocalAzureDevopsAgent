@@ -1,0 +1,6 @@
+@Local_Azure_Devops_Agent_HostAddress = http://localhost:5186
+
+GET {{Local_Azure_Devops_Agent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
