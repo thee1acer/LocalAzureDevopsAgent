@@ -2,7 +2,7 @@
 set -e  # Exit on any error
 
 # Install dependencies as root
-apt-get update && apt-get install -y curl tar libicu-dev expect
+apt-get update && apt-get install -y curl tar libicu-dev expect git
 
 # Ensure the "ubuntu" user exists
 if ! id "ubuntu" >/dev/null 2>&1; then
