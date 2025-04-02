@@ -21,6 +21,8 @@ namespace Local_Azure_Devops_Agent.Controllers
 		[HttpGet(Name = "GetWeatherForecast")]
 		public IEnumerable<WeatherForecast> Get()
 		{
+			_logger.LogInformation("Running Get Function");
+			
 			return Enumerable.Range(1, 5).Select(index => new WeatherForecast
 			{
 				Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
