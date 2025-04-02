@@ -1,8 +1,48 @@
-version: '3.4'
+version: "3.8"
 
 services:
-  localazuredevopsagent:
-    image: ${DOCKER_REGISTRY-}localazuredevopsagent
+  webapi:
+    image: webapi:latest
     build:
       context: .
-      dockerfile: Local Azure Devops Agent/Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+
+  ubuntu-agent:
+    image: ubuntu:latest
+    container_name: ubuntu-agent
+    restart: always
+    volumes:
+      - .:/workspace
+      - ./docker-scripts/ubuntu-agent/install-agent.sh:/install-agent.sh
+      - agent-data:/home/ubuntu/agent
+    stdin_open: true
+    tty: true
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
+      - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
+      - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
+      - ACCEPT_EULA=Y
+    entrypoint: ["/bin/bash", "-c", "/install-agent.sh && sleep infinity"]
+    user: "root"
+
+volumes:
+  agent-data:
