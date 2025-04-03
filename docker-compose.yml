@@ -43,4 +43,4 @@ services:
     user: "root"
 
 volumes:
-  agent-data:
+  ubuntu-data:
