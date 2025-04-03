@@ -79,7 +79,7 @@ stages:
         displayName: "Deploy Locally"
         pool:
           name: "Local Azure Agent"
-        condition: ne(variables['Build.SourceBranchName'], 'master')
+        condition: eq(variables['Build.SourceBranchName'], 'master')
 
         steps:
           - task: DockerCompose@0
