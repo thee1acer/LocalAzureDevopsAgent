@@ -1,7 +1,5 @@
 #!/bin/bash
 
-apt-get update && apt-get install -y wget
-
 # Exit on any error
 set -e
 
@@ -18,7 +16,6 @@ mkdir -p "$OUTPUT_DIR"
 # Check if Java is installed
 if ! command -v java &> /dev/null; then
   echo "Java is not installed. Installing Java..."
-  apt-get update -y &&  apt-get install -y openjdk-11-jre
 fi
 
 # Download PlantUML JAR if not already present
