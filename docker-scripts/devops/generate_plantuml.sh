@@ -5,7 +5,7 @@ set -e
 
 # Define paths
 PLANTUML_JAR="/home/ubuntu/agent/_work/1/s/plantuml.jar"
-WORKSPACE_DIR="/home/ubuntu/agent/_work/1/s/LocalAzureAgent/Assets"
+WORKSPACE_DIR="/home/ubuntu/agent/_work/1/s/Local Azure Devops Agent/Assets"
 OUTPUT_DIR="/home/ubuntu/agent/_work/1/s/attachments"
 PUML_FILE="${WORKSPACE_DIR}/umbraco-models.puml"
 OUTPUT_FILE="${WORKSPACE_DIR}/umbraco-models.png"
@@ -25,15 +25,15 @@ if [ ! -f "$PLANTUML_JAR" ]; then
 fi
 
 # Generate PNG using PlantUML JAR
-java -jar "$PLANTUML_JAR" -tpng "$PUML_FILE"
+java -jar "$PLANTUML_JAR" -tpng "$PUML_FILE" -o "$OUTPUT_DIR"
 
 # Verify if the PNG file was created
-if [ ! -f "$OUTPUT_FILE" ]; then
-  echo "Error: PNG generation failed. File not found: $OUTPUT_FILE"
+if [ ! -f "${OUTPUT_DIR}/umbraco-models.png" ]; then
+  echo "Error: PNG generation failed. File not found: ${OUTPUT_DIR}/umbraco-models.png"
   exit 1
 fi
 
 # Move the PNG to the attachments directory
-mv "$OUTPUT_FILE" "$OUTPUT_DIR/diagram.png"
+mv "${OUTPUT_DIR}/umbraco-models.png" "${OUTPUT_DIR}/diagram.png"
 
 echo "PlantUML diagram successfully generated and moved to: $OUTPUT_DIR/diagram.png"
