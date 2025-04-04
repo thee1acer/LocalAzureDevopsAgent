@@ -56,14 +56,17 @@ stages:
         condition: ne(variables['Build.SourceBranchName'], 'master')
 
         steps:
+          # Download the repository
           - download: current
 
+          # Run the Bash script to generate the PNG
           - task: Bash@3
             displayName: "Generate PNG from PlantUML"
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/generate_plantuml.sh
 
+          # Publish the generated PNG as an artifact
           - publish: $(Build.SourcesDirectory)/attachments/diagram.png
             artifact: plantuml-image
 
@@ -77,17 +80,21 @@ stages:
         condition: ne(variables['Build.SourceBranchName'], 'master')
 
         steps:
+          # Checkout the Wiki repo
           - checkout: self
 
+          # Download the artifact containing the image
           - download: current
             artifact: plantuml-image
 
+          # Run the bash script to push the image to the Wiki repo
           - task: Bash@3
             displayName: "Push Image to Wiki Repo"
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
 
+          # Display the markdown for the image in the Wiki
           - task: Bash@3
             displayName: "Display Wiki Image Markdown"
             inputs:
