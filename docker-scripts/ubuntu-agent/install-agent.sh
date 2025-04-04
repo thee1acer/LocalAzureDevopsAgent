@@ -3,6 +3,18 @@
 # install dependencies as root
 apt-get update && apt-get install -y curl tar libicu-dev expect git iputils-ping
 
+if ! command -v docker &>/dev/null; then
+    echo "### Docker not found. Installing Docker... ###"
+
+    apt-get install -y docker.io
+    systemctl start docker
+    systemctl enable docker
+
+    echo "### Docker installed successfully. ###"
+else
+    echo "Docker is already installed."
+fi
+
 # ensure the "ubuntu" user actually exists
 if ! id "ubuntu" >/dev/null 2>&1; then
     echo "### Error: User 'ubuntu' does not exist! ###"
@@ -13,8 +25,6 @@ fi
 AGENT_DIR="/home/ubuntu/agent"
 mkdir -p "$AGENT_DIR"
 chown -R ubuntu:ubuntu "$AGENT_DIR"
-
-export AZP_AGENT_DOWNGRADE_DISABLED=true
 
 # switch to ubuntu user and install or update the agent
 su - ubuntu -c "bash -c '
@@ -67,8 +77,8 @@ if [ -f "$AGENT_DIR/run.sh" ]; then
     echo "### Starting Azure DevOps Agent in foreground as ubuntu... ###"
     
     # switch to the 'ubuntu' user and run the agent
+    AZP_AGENT_DOWNGRADE_DISABLED=true
     exec su - ubuntu -c "$AGENT_DIR/run.sh"
-
     
 else
     echo "### Error: run.sh not found! Unable to start the agent. ###"
