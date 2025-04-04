@@ -90,6 +90,8 @@ stages:
           # Run the bash script to push the image to the Wiki repo
           - task: Bash@3
             displayName: "Push Image to Wiki Repo"
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh

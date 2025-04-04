@@ -10,9 +10,14 @@ ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
 IMAGE_PATH="${OUTPUT_DIR}/umbraco-models.png"
 WIKI_REPO_URL="https://32302916@dev.azure.com/32302916/Local%20Azure%20Devops%20Agent/_git/Local-Azure-Devops-Agent.wiki"
 
+if [ -z "$SYSTEM_ACCESSTOKEN" ]; then
+  echo "Error: SYSTEM_ACCESSTOKEN is not set."
+  exit 1
+fi
+
 # Clone the Azure DevOps Wiki repository
 echo "Cloning Wiki repository..."
-git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" clone $WIKI_REPO_URL $WIKI_REPO_DIR || { echo "Error cloning Wiki repo"; exit 1; }
+git -c http.extraheader="AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN" clone $WIKI_REPO_URL $WIKI_REPO_DIR || { echo "Error cloning Wiki repo"; exit 1; }
 
 # Create the attachments directory if it doesn't exist
 echo "Creating attachments directory if it doesn't exist..."
