@@ -31,6 +31,7 @@ services:
       - .:/workspace
       - ./docker-scripts/ubuntu-agent/install-agent.sh:/install-agent.sh
       - agent-data:/home/ubuntu/agent
+      - /var/run/docker.sock:/var/run/docker.sock
     stdin_open: true
     tty: true
     environment:
@@ -38,8 +39,15 @@ services:
       - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
       - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
       - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
-    entrypoint: ["/bin/bash", "-c", "/install-agent.sh && sleep infinity"]
+      - AZP_AGENT_DOWNGRADE_DISABLED=true
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "/install-agent.sh && /home/ubuntu/agent/bin/Agent.Listener run"
+      ]
     user: "root"
+    privileged: true
 
 volumes:
   ubuntu-data:
