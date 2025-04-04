@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   webapi:
     image: webapi:latest
@@ -40,9 +38,15 @@ services:
       - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
       - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
       - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
-      - ACCEPT_EULA=Y
-    entrypoint: ["/bin/bash", "-c", "/install-agent.sh && sleep infinity"]
+      - AZP_AGENT_DOWNGRADE_DISABLED=true
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "/install-agent.sh && /home/ubuntu/agent/bin/Agent.Listener run"
+      ]
     user: "root"
+    privileged: true
 
 volumes:
-  agent-data:
+  ubuntu-data:
