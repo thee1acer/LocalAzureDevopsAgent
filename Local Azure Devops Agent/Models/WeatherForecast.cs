@@ -1,4 +1,4 @@
-namespace Local_Azure_Devops_Agent
+namespace Local_Azure_Devops_Agent.Models
 {
 	public class WeatherForecast
 	{
