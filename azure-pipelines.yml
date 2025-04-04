@@ -93,4 +93,4 @@ stages:
             inputs:
               targetType: "inline"
               script: |
-                echo "![Diagram](attachments/diagram.png)"
+                echo "Markdown for Wiki: ![Diagram](attachments/diagram.png)"
