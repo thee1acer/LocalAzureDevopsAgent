@@ -25,7 +25,7 @@ if [ ! -f "$PLANTUML_JAR" ]; then
 fi
 
 # Generate PNG using PlantUML JAR
-java -jar "$PLANTUML_JAR" -tpng "$PUML_FILE" -o "$OUTPUT_DIR"
+java -jar "$PLANTUML_JAR" -DPLANTUML_DOT="/usr/bin/dot" -tpng "$PUML_FILE" -o "$OUTPUT_DIR"
 
 # Verify if the PNG file was created
 if [ ! -f "${OUTPUT_FILE}" ]; then
