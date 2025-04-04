@@ -67,7 +67,7 @@ stages:
               filePath: docker-scripts/devops/generate_plantuml.sh
 
           # Publish the generated PNG as an artifact
-          - publish: $(Build.SourcesDirectory)/attachments/diagram.png
+          - publish: $(Build.SourcesDirectory)/attachments/umbraco-models.png
             artifact: plantuml-image
 
   - stage: PlantUMLDiagramDeployment

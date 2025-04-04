@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install dependencies as root
-apt-get update && apt-get install -y curl tar libicu-dev expect git iputils-ping wget openjdk-11-jre
+apt-get update && apt-get install -y curl tar libicu-dev expect git iputils-ping wget openjdk-11-jre graphviz
 
 if ! command -v docker &>/dev/null; then
     echo "### Docker not found. Installing Docker... ###"
