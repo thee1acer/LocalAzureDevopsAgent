@@ -51,6 +51,10 @@ stages:
     jobs:
       - job: GenerateDiagram
         displayName: "Run PlantUML Docker to generate image"
+        pool:
+          name: "Local Azure Agent"
+        condition: ne(variables['Build.SourceBranchName'], 'master')
+
         steps:
           - download: current
 
@@ -68,6 +72,10 @@ stages:
     jobs:
       - job: UploadToWiki
         displayName: "Commit and push image to Azure DevOps Wiki"
+        pool:
+          name: "Local Azure Agent"
+        condition: ne(variables['Build.SourceBranchName'], 'master')
+
         steps:
           - checkout: self
 
