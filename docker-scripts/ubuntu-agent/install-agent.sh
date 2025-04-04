@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# exit on any error
-set -e  
-
 # install dependencies as root
-apt-get update && apt-get install -y curl tar libicu-dev expect git
+apt-get update && apt-get install -y curl tar libicu-dev expect git iputils-ping
 
 # ensure the "ubuntu" user actually exists
 if ! id "ubuntu" >/dev/null 2>&1; then
@@ -42,7 +39,7 @@ su - ubuntu -c "bash -c '
     fi
 
     if [ ! -f \"\$AGENT_DIR/.agent\" ]; then
-        if [ -f \"\$AGENT_DIR/vsts-agent.tar.gz\" ]; then
+        if [ -f "$AGENT_DIR/vsts-agent.tar.gz" ] && gzip -t "$AGENT_DIR/vsts-agent.tar.gz" && ls -lh "$AGENT_DIR/vsts-agent.tar.gz"; then
             echo \"### Existing tar file found. Now extracting... ###\"
         else
             echo \"### Agent not found and no existing tar file. Starting download... ###\"
@@ -57,6 +54,7 @@ su - ubuntu -c "bash -c '
     chmod +x config.sh
 
     echo \"### Connecting to the agent pool ###\"
+    export AZP_AGENT_DOWNGRADE_DISABLED=true
     ./config.sh --url \"${AZURE_COMPANY_URL}\" --auth PAT --token \"${AZURE_PERSONAL_TOKEN}\" --pool \"${AZURE_AGENT_POOL}\" --agent \"ubuntu-agent-\$(hostname)\"
     echo \"### Connecting to the agent pool is complete ###\"
 '"
@@ -69,6 +67,8 @@ if [ -f "$AGENT_DIR/run.sh" ]; then
     
     # switch to the 'ubuntu' user and run the agent
     exec su - ubuntu -c "$AGENT_DIR/run.sh"
+
+    
 else
     echo "### Error: run.sh not found! Unable to start the agent. ###"
     exit 1

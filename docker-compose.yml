@@ -38,7 +38,6 @@ services:
       - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
       - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
       - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
-      - ACCEPT_EULA=Y
     entrypoint: ["/bin/bash", "-c", "/install-agent.sh && sleep infinity"]
     user: "root"
 

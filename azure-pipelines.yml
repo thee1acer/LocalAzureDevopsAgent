@@ -27,9 +27,6 @@ stages:
           - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
 
-          #- script: dotnet test "Local Azure Devops Agent.sln" --no-build --configuration Release --logger trx
-          #displayName: "Run Tests"
-
       - job: Build_Local
         displayName: "Restore, Build, and Test (Local Agent)"
         pool:
@@ -49,47 +46,43 @@ stages:
           - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
 
-          #- script: dotnet test "Local Azure Devops Agent.sln" --no-build --configuration Release --logger trx
-          # displayName: "Run Tests"
-
-  - stage: Deploy
-    displayName: "Deploy API and SQL Server"
-    dependsOn: Build
+  - stage: PlantUMLDiagramGeneration
+    displayName: "Generate PlantUML Diagram"
     jobs:
-      - job: Deploy_Prod
-        displayName: "Deploy to Production"
-        pool:
-          name: "Azure Pipelines"
-        condition: eq(variables['Build.SourceBranchName'], 'master')
-
+      - job: GenerateDiagram
+        displayName: "Run PlantUML Docker to generate image"
         steps:
-          - task: DockerCompose@0
-            displayName: "Build and Push API and SQL Server"
+          - download: current
+
+          - task: Bash@3
+            displayName: "Generate PNG from PlantUML"
             inputs:
-              containerregistrytype: "Container Registry"
-              dockerComposeFile: "**/docker-compose.yml"
-              action: "Build services"
-              additionalImageTags: "$(Build.BuildId)"
+              targetType: "filePath"
+              filePath: docker-scripts/devops/generate_plantuml.sh
 
-          - script: |
-              echo "Deploying to production"
-            displayName: "Production Deployment Step"
+          - publish: $(Build.SourcesDirectory)/attachments/diagram.png
+            artifact: plantuml-image
 
-      - job: Deploy_Local
-        displayName: "Deploy Locally"
-        pool:
-          name: "Local Azure Agent"
-        condition: eq(variables['Build.SourceBranchName'], 'master')
-
+  - stage: PlantUMLDiagramDeployment
+    displayName: "Upload to Azure DevOps Wiki"
+    jobs:
+      - job: UploadToWiki
+        displayName: "Commit and push image to Azure DevOps Wiki"
         steps:
-          - task: DockerCompose@0
-            displayName: "Build and Push API and SQL Server"
-            inputs:
-              containerregistrytype: "Container Registry"
-              dockerComposeFile: "**/docker-compose.yml"
-              action: "Build services"
-              additionalImageTags: "$(Build.BuildId)"
+          - checkout: self
 
-          - script: |
-              docker-compose up -d
-            displayName: "Deploy API and SQL Server (Local)"
+          - download: current
+            artifact: plantuml-image
+
+          - task: Bash@3
+            displayName: "Push Image to Wiki Repo"
+            inputs:
+              targetType: "filePath"
+              filePath: docker-scripts/devops/push_to_wiki.sh
+
+          - task: Bash@3
+            displayName: "Display Wiki Image Markdown"
+            inputs:
+              targetType: "inline"
+              script: |
+                echo "![Diagram](attachments/diagram.png)"
