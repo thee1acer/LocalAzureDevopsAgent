@@ -31,7 +31,6 @@ services:
       - .:/workspace
       - ./docker-scripts/ubuntu-agent/install-agent.sh:/install-agent.sh
       - agent-data:/home/ubuntu/agent
-      - /var/run/docker.sock:/var/run/docker.sock
     stdin_open: true
     tty: true
     environment:
