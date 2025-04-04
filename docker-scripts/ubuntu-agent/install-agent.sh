@@ -14,6 +14,8 @@ AGENT_DIR="/home/ubuntu/agent"
 mkdir -p "$AGENT_DIR"
 chown -R ubuntu:ubuntu "$AGENT_DIR"
 
+export AZP_AGENT_DOWNGRADE_DISABLED=true
+
 # switch to ubuntu user and install or update the agent
 su - ubuntu -c "bash -c '
     set -e
@@ -54,7 +56,6 @@ su - ubuntu -c "bash -c '
     chmod +x config.sh
 
     echo \"### Connecting to the agent pool ###\"
-    export AZP_AGENT_DOWNGRADE_DISABLED=true
     ./config.sh --url \"${AZURE_COMPANY_URL}\" --auth PAT --token \"${AZURE_PERSONAL_TOKEN}\" --pool \"${AZURE_AGENT_POOL}\" --agent \"ubuntu-agent-\$(hostname)\"
     echo \"### Connecting to the agent pool is complete ###\"
 '"
