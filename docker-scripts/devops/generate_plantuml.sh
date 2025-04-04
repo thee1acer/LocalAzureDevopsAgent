@@ -28,8 +28,8 @@ fi
 java -jar "$PLANTUML_JAR" -tpng "$PUML_FILE" -o "$OUTPUT_DIR"
 
 # Verify if the PNG file was created
-if [ ! -f "${OUTPUT_DIR}/umbraco-models.png" ]; then
-  echo "Error: PNG generation failed. File not found: ${OUTPUT_DIR}/umbraco-models.png"
+if [ ! -f "${WORKSPACE_DIR }/umbraco-models.png" ]; then
+  echo "Error: PNG generation failed. File not found: ${WORKSPACE_DIR }/umbraco-models.png"
   exit 1
 fi
 
