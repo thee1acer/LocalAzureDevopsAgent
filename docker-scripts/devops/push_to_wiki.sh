@@ -5,8 +5,7 @@ set -e
 echo "Starting to push diagram to code-based Azure DevOps Wiki..."
 
 # Paths
-ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
-TARGET_IMAGE="${ATTACHMENTS_DIR}/umbraco-models.png"
+TARGET_IMAGE="${WIKI_REPO_DIR}/umbraco-models.png"
 MD_FILE="${WIKI_REPO_DIR}/Umbraco-Models-RelationShip.md"  # Replace with your desired .md file
 
 # Ensure IMAGE_PATH is provided
@@ -14,9 +13,6 @@ if [ -z "$IMAGE_PATH" ]; then
   echo "ERROR: IMAGE_PATH is not set."
   exit 1
 fi
-
-# Create attachments dir if it doesn't exist
-mkdir -p "$ATTACHMENTS_DIR"
 
 # Copy new image over
 echo "Copying image from $IMAGE_PATH to $TARGET_IMAGE"
@@ -35,11 +31,11 @@ git config user.name "DevOps Bot"
 git diff --stat
 
 # Force add the image to track the changes
-git add -f "attachments/umbraco-models.png"
+git add -f "./umbraco-models.png"
 
 # Add the image reference to the Markdown file
 echo "Adding image reference to the Markdown file: $MD_FILE"
-echo -e "\n![Umbraco Models](attachments/umbraco-models.png)" >> "$MD_FILE"
+echo -e "\n![Umbraco Models](./umbraco-models.png)" >> "$MD_FILE"
 
 # Check if there are any changes to commit
 if git diff --quiet && git diff --staged --quiet; then
