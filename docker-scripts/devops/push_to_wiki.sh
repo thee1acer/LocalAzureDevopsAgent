@@ -26,7 +26,7 @@ fi
 
 
 # Clone the Azure DevOps Wiki repository
-echo "Cloning Wiki repository..."
+echo "Cloning Wiki repository ### $WIKI_REPO_URL ###... "
 git -c http.extraheader="AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN" clone $WIKI_REPO_URL $WIKI_REPO_DIR || { echo "Error cloning Wiki repo"; exit 1; }
 
 # Create the attachments directory if it doesn't exist
