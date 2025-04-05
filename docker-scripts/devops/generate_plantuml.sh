@@ -4,9 +4,6 @@
 set -e
 
 # Define paths
-PLANTUML_JAR="/home/ubuntu/agent/_work/1/s/plantuml.jar"
-WORKSPACE_DIR="/home/ubuntu/agent/_work/1/s/Local Azure Devops Agent/Assets"
-OUTPUT_DIR="/home/ubuntu/agent/_work/1/s/attachments"
 PUML_FILE="${WORKSPACE_DIR}/umbraco-models.puml"
 OUTPUT_FILE="${OUTPUT_DIR}/umbraco-models.png"
 
