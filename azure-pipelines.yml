@@ -92,7 +92,7 @@ stages:
             displayName: "Push Image to Wiki Repo"
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-              WIKI_REPO_URL: https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent/_git/Local-Azure-Devops-Agent.wiki
+              WIKI_REPO_URL: https://dev.azure.com/32302916/_git/Local%20Azure%20Devops%20Agent
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
