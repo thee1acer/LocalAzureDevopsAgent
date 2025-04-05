@@ -56,17 +56,18 @@ stages:
         condition: ne(variables['Build.SourceBranchName'], 'master')
 
         steps:
-          # Download the repository
           - download: current
 
-          # Run the Bash script to generate the PNG
           - task: Bash@3
             displayName: "Generate PNG from PlantUML"
+            env:
+              PLANTUML_JAR: $(Build.SourcesDirectory)/plantuml.jar
+              WORKSPACE_DIR: "$(Build.SourcesDirectory)/Local Azure Devops Agent/Assets"
+              OUTPUT_DIR: $(Build.SourcesDirectory)/attachments
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/generate_plantuml.sh
 
-          # Publish the generated PNG as an artifact
           - publish: $(Build.SourcesDirectory)/attachments/umbraco-models.png
             artifact: plantuml-image
 
@@ -91,7 +92,7 @@ stages:
           - task: Bash@3
             displayName: "Push Image to Wiki Repo"
             env:
-              IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
+              IMAGE_PATH: $(Build.SourcesDirectory)/attachments/umbraco-models.png
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
