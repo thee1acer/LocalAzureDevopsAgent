@@ -92,7 +92,7 @@ stages:
           - task: Bash@3
             displayName: "Push Image to Wiki Repo"
             env:
-              IMAGE_PATH: $(Build.SourcesDirectory)/attachments/umbraco-models.png
+              IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh

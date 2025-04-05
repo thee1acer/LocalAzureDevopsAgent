@@ -30,4 +30,4 @@ if [ ! -f "${OUTPUT_FILE}" ]; then
   exit 1
 fi
 
-echo "PlantUML diagram successfully generated and is availablein: $OUTPUT_FILE"
+echo "PlantUML diagram successfully generated and is available in: $OUTPUT_FILE"
