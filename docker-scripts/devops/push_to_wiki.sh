@@ -8,7 +8,7 @@ echo "Starting to push diagram to the Azure DevOps Wiki..."
 
 # Define environment variables for paths
 OUTPUT_DIR="/home/ubuntu/agent/_work/1/s/attachments"  # Update this path if necessary
-WIKI_REPO_DIR="wiki"
+WIKI_REPO_DIR="wiki_repo"
 ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
 IMAGE_PATH="${OUTPUT_DIR}/umbraco-models.png"
 
