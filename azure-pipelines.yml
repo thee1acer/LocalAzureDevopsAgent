@@ -64,7 +64,6 @@ stages:
               PLANTUML_JAR: $(Build.SourcesDirectory)/plantuml.jar
               WORKSPACE_DIR: "$(Build.SourcesDirectory)/Local Azure Devops Agent/Assets"
               OUTPUT_DIR: $(Build.SourcesDirectory)/attachments
-              WIKI_REPO_DIR: $(Build.SourcesDirectory)/wiki
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/generate_plantuml.sh
@@ -94,6 +93,7 @@ stages:
             displayName: "Push Image to Wiki Repo"
             env:
               IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
+              WIKI_REPO_DIR: $(Build.SourcesDirectory)/wiki
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
