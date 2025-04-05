@@ -7,10 +7,9 @@ set -e
 echo "Starting to push diagram to the Azure DevOps Wiki..."
 
 # Define environment variables for paths
-OUTPUT_DIR="/home/ubuntu/agent/_work/1/s/attachments"  # Update this path if necessary
-WIKI_REPO_DIR="wiki_repo"
+WIKI_REPO_DIR="wiki"
 ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
-IMAGE_PATH="${OUTPUT_DIR}/umbraco-models.png"
+IMAGE_PATH=$ARTIFACT
 
 # Ensure SYSTEM_ACCESSTOKEN is available
 if [ -z "$SYSTEM_ACCESSTOKEN" ]; then
@@ -27,7 +26,7 @@ fi
 
 # Clone the Azure DevOps Wiki repository
 echo "Cloning Wiki repository ### $WIKI_REPO_URL ###... "
-git -c http.extraheader="AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN" clone $WIKI_REPO_URL $WIKI_REPO_DIR || { echo "Error cloning Wiki repo"; exit 1; }
+#git -c http.extraheader="AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN" clone $WIKI_REPO_URL $WIKI_REPO_DIR || { echo "Error cloning Wiki repo"; exit 1; }
 
 # Create the attachments directory if it doesn't exist
 echo "Creating attachments directory if it doesn't exist..."
@@ -35,10 +34,10 @@ mkdir -p "$ATTACHMENTS_DIR"
 
 # Copy the generated diagram into the Wiki repo's attachments directory
 echo "Copying diagram to Wiki repo..."
-cp "$IMAGE_PATH" "$ATTACHMENTS_DIR/diagram.png" || { echo "Error copying diagram"; exit 1; }
+cp "$IMAGE_PATH" "$ATTACHMENTS_DIR/umbraco-models.png" || { echo "Error copying diagram"; exit 1; }
 
 # Commit and push the image to the Wiki
-cd "$WIKI_REPO_DIR"
+#cd "$WIKI_REPO_DIR"
 
 # Configure git user (to avoid commit failures)
 git config user.email "devops-bot@mynwu.com"
