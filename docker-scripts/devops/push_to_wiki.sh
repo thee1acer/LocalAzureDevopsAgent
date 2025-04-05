@@ -8,6 +8,7 @@ echo "Starting to push diagram to code-based Azure DevOps Wiki..."
 WIKI_REPO_DIR="wiki"
 ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
 TARGET_IMAGE="${ATTACHMENTS_DIR}/umbraco-models.png"
+MD_FILE="${WIKI_REPO_DIR}/README.md"  # Replace with your desired .md file
 
 # Ensure IMAGE_PATH is provided
 if [ -z "$IMAGE_PATH" ]; then
@@ -19,7 +20,11 @@ fi
 mkdir -p "$ATTACHMENTS_DIR"
 
 # Copy new image over
+echo "Copying image from $IMAGE_PATH to $TARGET_IMAGE"
 cp "$IMAGE_PATH" "$TARGET_IMAGE" || { echo "Error copying diagram"; exit 1; }
+
+# Debugging step: Check if the file is copied
+ls -l "$TARGET_IMAGE"
 
 # Git operations
 cd "$WIKI_REPO_DIR"
@@ -27,12 +32,22 @@ cd "$WIKI_REPO_DIR"
 git config user.email "devops-bot@mynwu.com"
 git config user.name "DevOps Bot"
 
+# Check for changes in the repository
+git diff --stat
+
+# Force add the image to track the changes
+git add -f "attachments/umbraco-models.png"
+
+# Add the image reference to the Markdown file
+echo "Adding image reference to the Markdown file: $MD_FILE"
+echo -e "\n![Umbraco Models](attachments/umbraco-models.png)" >> "$MD_FILE"
+
+# Check if there are any changes to commit
 if git diff --quiet && git diff --staged --quiet; then
   echo "No changes to commit."
 else
   echo "Committing and pushing diagram to code-based Wiki..."
-  git add -f "attachments/umbraco-models.png"
-  git commit -m "Auto-updated PlantUML diagram"
+  git commit -m "Auto-updated PlantUML diagram and added image to README.md" --date "$(date)"
   git push origin main || { echo "Error pushing changes"; exit 1; }
-  echo "Diagram successfully pushed to the Wiki."
+  echo "Diagram and Markdown file successfully updated and pushed to the Wiki."
 fi
