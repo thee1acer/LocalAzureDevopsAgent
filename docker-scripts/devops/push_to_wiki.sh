@@ -5,7 +5,6 @@ set -e
 echo "Starting to push diagram to code-based Azure DevOps Wiki..."
 
 # Paths
-WIKI_REPO_DIR="wiki"
 ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
 TARGET_IMAGE="${ATTACHMENTS_DIR}/umbraco-models.png"
 MD_FILE="${WIKI_REPO_DIR}/Umbraco-Models-RelationShip.md"  # Replace with your desired .md file
