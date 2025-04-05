@@ -8,7 +8,7 @@ echo "Starting to push diagram to code-based Azure DevOps Wiki..."
 WIKI_REPO_DIR="wiki"
 ATTACHMENTS_DIR="${WIKI_REPO_DIR}/attachments"
 TARGET_IMAGE="${ATTACHMENTS_DIR}/umbraco-models.png"
-MD_FILE="${WIKI_REPO_DIR}/README.md"  # Replace with your desired .md file
+MD_FILE="${WIKI_REPO_DIR}/Umbraco-Models-RelationShip.md"  # Replace with your desired .md file
 
 # Ensure IMAGE_PATH is provided
 if [ -z "$IMAGE_PATH" ]; then
