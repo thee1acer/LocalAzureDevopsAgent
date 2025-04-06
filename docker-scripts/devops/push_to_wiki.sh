@@ -45,9 +45,7 @@ else
   git commit -m "Auto-updated PlantUML diagram and added image to README.md" --date "$(date)"
   echo "Commited"
 
-  git remote set-url origin "https://buildagent:${TOKEN}@dev.azure.com/YOUR_ORG/YOUR_PROJECT/_git/YOUR_REPO"
-
-  #git push origin feature/testing-local-builds || { echo "Error pushing changes"; exit 1; }
+  git remote set-url origin "https://buildagent:$TOKEN@$HOST_ADDRESS" || { echo "Error setting url"; exit 1; }
   git push origin HEAD:refs/heads/feature/testing-local-builds || { echo "Error pushing changes"; exit 1; }
 
   echo "Diagram and Markdown file successfully updated and pushed to the Wiki."

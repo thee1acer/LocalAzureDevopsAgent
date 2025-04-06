@@ -96,6 +96,7 @@ stages:
               IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
               WIKI_REPO_DIR: $(Build.SourcesDirectory)/wiki
               TOKEN: $(System.AccessToken)
+              HOST_ADDRESS: dev.azure.com/32302916/_git/Local%20Azure%20Devops%20Agent
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
