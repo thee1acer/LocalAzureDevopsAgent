@@ -83,6 +83,7 @@ stages:
         steps:
           # Checkout the Wiki repo
           - checkout: self
+            persistCredentials: true
 
           # Download the artifact containing the image
           - download: current
@@ -94,6 +95,7 @@ stages:
             env:
               IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
               WIKI_REPO_DIR: $(Build.SourcesDirectory)/wiki
+              TOKEN: $(System.AccessToken)
             inputs:
               targetType: "filePath"
               filePath: docker-scripts/devops/push_to_wiki.sh
