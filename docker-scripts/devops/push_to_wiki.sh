@@ -43,6 +43,11 @@ if git diff --quiet && git diff --staged --quiet; then
 else
   echo "Committing and pushing diagram to code-based Wiki..."
   git commit -m "Auto-updated PlantUML diagram and added image to README.md" --date "$(date)"
-  git push origin feature/testing-local-builds || { echo "Error pushing changes"; exit 1; }
+
+  echo "Commited"
+
+  #git push origin feature/testing-local-builds || { echo "Error pushing changes"; exit 1; }
+  git push origin HEAD:refs/heads/feature/testing-local-builds || { echo "Error pushing changes"; exit 1; }
+
   echo "Diagram and Markdown file successfully updated and pushed to the Wiki."
 fi
