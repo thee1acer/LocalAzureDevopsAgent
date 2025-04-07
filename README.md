@@ -1,21 +1,24 @@
 
-# Project Name
-
-![Project Logo](link_to_logo_image)
+# Local Azure Devops Agent
 
 ## Description
 
-A brief description of what this project does and its purpose. Describe the problem your project is solving and how it helps users.
-
-Example:
-> "This project is a tool for automating the deployment of Azure DevOps pipelines locally, mimicking the behavior of cloud-hosted agents."
+> This project is a local Azure DevOps agent that replicates the behavior of a cloud-hosted Azure DevOps agent, allowing you to run pipelines locally for testing and development purposes.
+The solution is implemented using a Docker container that runs a Linux image of the Azure DevOps agent. The agent image is sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases).
+The initial implementation of this solution was created in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent).
 
 ## Features
 
-- List of features or functionalities.
-- Easy-to-use interface
-- Scalable for various environments
-- Integration with [Azure DevOps](https://dev.azure.com/)
+- Run Azure DevOps Pipelines Locally:
+  > Replicate the behavior of a cloud-hosted Azure DevOps agent on your local machine, allowing you to run and test pipelines locally without needing to rely on cloud infrastructure. This is ideal for testing, debugging, and developing without waiting for cloud execution times.
+- Trigger Pipelines on Feature Branches:
+  > Automatically trigger pipeline runs for commits on feature branches (any branch except the master branch), enabling more granular testing of new features or bug fixes before merging them into the main codebase.
+- Flexible and Customizable Solution:
+  > The Docker container can be easily adjusted to use different images or configurations, allowing you to tailor the solution for specific environments or use cases.
+- Scalable for Various Environments:
+  > The solution can be scaled to different environments or teams, making it suitable for both small-scale projects and larger enterprise setups, ensuring flexibility in CI/CD workflows.
+- Seamless Integration with Azure DevOps:
+  > Direct integration with Azure DevOps allows for smooth connectivity and operation within your existing DevOps pipelines, minimizing setup complexity and streamlining the process.
 
 ## Table of Contents
 
