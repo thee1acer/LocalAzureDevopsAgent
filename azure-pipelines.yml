@@ -23,24 +23,8 @@ stages:
               packageType: "sdk"
               version: "8.x"
 
-          - task: Cache@2
-            displayName: "Cache NuGet packages"
-            inputs:
-              key: 'nuget | "$(Agent.OS)" | **/*.sln'
-              restoreKeys: |
-                nuget | "$(Agent.OS)"
-              path: $(NuGetPackageRoot)
-
           - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
-
-          - task: Cache@2
-            displayName: "Cache build output"
-            inputs:
-              key: 'build-output | "$(Agent.OS)" | **/*.csproj'
-              restoreKeys: |
-                build-output | "$(Agent.OS)"
-              path: $(Build.ArtifactStagingDirectory)
 
           - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
