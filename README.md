@@ -34,37 +34,53 @@ The initial implementation of this solution was created in Azure DevOps. You can
 - ```Git```: To clone repo and interact with source control.
 - ```Docker```: To run the agent that is deployed in a docker container.
 - ```VS Code (Recommended, Not Required)```
-- ```Azure DevOps Account```
+- ```Azure DevOps Account and Project```:  This is going to be used within a project
 - ```Personal Access Token (will show how to set this up)```: So that the agent can interact with the cloud environment
 - ```Agent Pool Setup```: This is to just ensure that our agent is going to run on a custom pool.
 
 ### Steps (assuming you want to add this local agent to your existing azure devops repo)
 
 1. ```Clone the repository```: git clone https://github.com/thee1acer/LocalAzureDevopsAgent.git (not necessary)
-2. ```Docker Container Setup```:
+2. ```Setting up Azure Devops Pool and Personal access token (PAT) and configuration file```:
+   - Setting up Azure Devops Pool:
+     > In your Azure Devops Project navigate to Project Settings > Agent Pools ![image](https://github.com/user-attachments/assets/a1f4ddb5-9281-4b9f-848b-205b0077739c) and add self hosted agent, see [Azure Devops Self Hosted Agent'](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops&tabs=IP-V4) We are going to need this name so keep it safe.
+
+   - Personal Access Token (PAT)
+     > In your Azure Devops Project naviagte to user settings ![image](https://github.com/user-attachments/assets/2655bf97-6ea3-4a23-954a-c5857c4ef2a0) and navogate to ```personal access tokens``` >> Add new token >>  Assign rights >> Copy token generated because it is not saved and keep it safe
+
+   - Configuration file:
+      > In your project root folder add a .env file that has fields:
+      ```bash
+        # Here is an example
+        AZURE_PERSONAL_TOKEN="---------------------"
+        AZURE_AGENT_POOL="Local Azure Agent" #depends on what you called the agent pool you created
+        AZURE_COMPANY_URL="https://dev.azure.com/32302916" # this is just a link to you devops project not the repo
+      ```
+4. ```Docker Container Setup```:
    - Copy docker container definition into your docker-compose yml file.
    
    - Copy docker-scripts folder into the root of your project. Ensure that the scripts have unix line endings. Easiest way to check this is if you open a .sh script in notepad++ it should show this at the bottom right corner ![image](https://github.com/user-attachments/assets/7e2843f6-5b94-4957-b9db-5b3fcef1ea98).
 
    - In your terminal you should run ```docker-compose up ubuntu agent ```. If prompted to accept terms and conditions of the agent enter 'Y'. If asked for type of authentication hit enter for PAT.
    - Enter PAT and wait for connection
-4. ```Trigger pipeline on commits```:
+5. ```Trigger pipeline on commits```:
    - For this step we need to change a small portion of our release pipeline.
      > For pipeline build trigger you need to add:
      
-     `bash
+     ```bash
      trigger:
       branches:
        include:
          - master
          - "*"
-     `
+     ```
      > For our pipeline to dynamically select the agent pool to run when trigger we need to set
-     `
+     ```bash
        variables:
        poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
-     `
-3. Now the pipeline will be triggered once
+     ```
+3. Now the pipeline will be triggered and run the local azure agent whenever we commit on our local branches
+
 ---
 
 ## Usage
@@ -110,6 +126,9 @@ Please follow our [Code of Conduct](link_to_code_of_conduct) when contributing.
 ## Acknowledgments
 
 - List any third-party resources, libraries, or tools that were used.
+
+  ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
+
 - Inspiration or credit for ideas.
 
 Example:
