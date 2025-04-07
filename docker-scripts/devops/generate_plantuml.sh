@@ -2,6 +2,8 @@
 
 set -e
 
+echo "ON Pool $POOL_NAME with branch: $MATCH_NAME"
+
 PUML_FILE="${WORKSPACE_DIR}/umbraco-models.puml"
 OUTPUT_FILE="${OUTPUT_DIR}/umbraco-models.png"
 

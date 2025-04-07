@@ -40,6 +40,8 @@ stages:
           - task: Bash@3
             displayName: "Generate PNG from PlantUML"
             env:
+              POOL_NAME: $(poolName)
+              MATCH_NAME: $(variables['Build.SourceBranchName'])
               PLANTUML_JAR: $(Build.SourcesDirectory)/plantuml.jar
               WORKSPACE_DIR: "$(Build.SourcesDirectory)/Local Azure Devops Agent/Assets"
               OUTPUT_DIR: $(Build.SourcesDirectory)/attachments
