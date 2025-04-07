@@ -4,16 +4,18 @@ trigger:
       - master
       - "*"
 
+variables:
+  poolName: $[if(eq(variables['Build.SourceBranchName'], 'refs/heads/master'), 'Azure Pipelines', 'Local Azure Agent')]
+
+pool:
+  name: $(poolName)
+
 stages:
   - stage: Build
     displayName: "Build and Test"
     jobs:
       - job: Build
         displayName: "Restore, Build, and Test"
-        pool:
-          name: "Azure Pipelines" # Hosted agent for master
-        condition: eq(variables['Build.SourceBranchName'], 'master')
-
         steps:
           - task: UseDotNet@2
             displayName: "Install .NET SDK"
@@ -21,27 +23,24 @@ stages:
               packageType: "sdk"
               version: "8.x"
 
-          - script: dotnet restore "Local Azure Devops Agent.sln"
-            displayName: "Restore dependencies"
-
-          - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
-            displayName: "Build"
-
-      - job: Build_Local
-        displayName: "Restore, Build, and Test (Local Agent)"
-        pool:
-          name: "Local Azure Agent"
-        condition: ne(variables['Build.SourceBranchName'], 'master')
-
-        steps:
-          - task: UseDotNet@2
-            displayName: "Install .NET SDK"
+          - task: Cache@2
+            displayName: "Cache NuGet packages"
             inputs:
-              packageType: "sdk"
-              version: "8.x"
+              key: 'nuget | "$(Agent.OS)" | **/*.sln'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+              path: $(NuGetPackageRoot)
 
           - script: dotnet restore "Local Azure Devops Agent.sln"
             displayName: "Restore dependencies"
+
+          - task: Cache@2
+            displayName: "Cache build output"
+            inputs:
+              key: 'build-output | "$(Agent.OS)" | **/*.csproj'
+              restoreKeys: |
+                build-output | "$(Agent.OS)"
+              path: $(Build.ArtifactStagingDirectory)
 
           - script: dotnet build "Local Azure Devops Agent.sln" --no-restore --configuration Release
             displayName: "Build"
@@ -51,10 +50,6 @@ stages:
     jobs:
       - job: GenerateDiagram
         displayName: "Run PlantUML Docker to generate image"
-        pool:
-          name: "Local Azure Agent"
-        condition: ne(variables['Build.SourceBranchName'], 'master')
-
         steps:
           - download: current
 
@@ -70,41 +65,3 @@ stages:
 
           - publish: $(Build.SourcesDirectory)/attachments/umbraco-models.png
             artifact: plantuml-image
-
-  - stage: PlantUMLDiagramDeployment
-    displayName: "Upload to Azure DevOps Wiki"
-    jobs:
-      - job: UploadToWiki
-        displayName: "Commit and push image to Azure DevOps Wiki"
-        pool:
-          name: "Local Azure Agent"
-        condition: ne(variables['Build.SourceBranchName'], 'master')
-
-        steps:
-          # Checkout the Wiki repo
-          - checkout: self
-            persistCredentials: true
-
-          # Download the artifact containing the image
-          - download: current
-            artifact: plantuml-image
-
-          # Run the bash script to push the image to the Wiki repo
-          - task: Bash@3
-            displayName: "Push Image to Wiki Repo"
-            env:
-              IMAGE_PATH: $(Pipeline.Workspace)/plantuml-image/umbraco-models.png
-              WIKI_REPO_DIR: $(Build.SourcesDirectory)/wiki
-              TOKEN: $(System.AccessToken)
-              HOST_ADDRESS: dev.azure.com/32302916/_git/Local%20Azure%20Devops%20Agent
-            inputs:
-              targetType: "filePath"
-              filePath: docker-scripts/devops/push_to_wiki.sh
-
-          # Display the markdown for the image in the Wiki
-          - task: Bash@3
-            displayName: "Display Wiki Image Markdown"
-            inputs:
-              targetType: "inline"
-              script: |
-                echo "Markdown for Wiki: ![Diagram](attachments/diagram.png)"
