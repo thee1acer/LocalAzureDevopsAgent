@@ -50,7 +50,7 @@ fi
 # See this link for updated versions of the agent: https://github.com/microsoft/azure-pipelines-agent/releases
 su - ubuntu -c "bash -c '
     set -e
-    AGENT_VERSION=\"4.255.0\"  # Update if necessary
+    AGENT_VERSION=\"4.252.0\"  # Update if necessary
     AGENT_URL=\"https://vstsagentpackage.azureedge.net/agent/\$AGENT_VERSION/vsts-agent-linux-x64-\$AGENT_VERSION.tar.gz\"
     AGENT_DIR=\"\$HOME/agent\"
 
