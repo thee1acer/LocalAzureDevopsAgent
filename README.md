@@ -69,7 +69,7 @@ The initial implementation was developed in Azure DevOps. You can view the proje
    - Copy the Docker container definition into your `docker-compose.yml` file.
    - Copy the `docker-scripts` folder into the root of your project. Ensure the scripts use Unix line endings (check with Notepad++).
    - In your terminal, run:  
-     `docker-compose up ubuntu agent`  
+     `docker-compose run --service-ports ubuntu-agent`  
      Accept the agent terms and conditions when prompted. When asked for the authentication type, press **Enter** to select **PAT**. Paste your PAT and wait for the connection to complete.
 
 4. **Trigger Pipelines on Commits**  
@@ -102,7 +102,13 @@ The initial implementation was developed in Azure DevOps. You can view the proje
 5. **Pipeline Execution**  
    Once set up, the pipeline will automatically trigger and run the local Azure DevOps agent for commits on local branches.
 
-   ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
+
+** See **
+![image](https://github.com/user-attachments/assets/955e1d0d-08c8-4b22-a07e-2fdf066fea53)
+
+![image](https://github.com/user-attachments/assets/eb6f592c-1079-4688-8323-763b7ae51613)
+
+![image](https://github.com/user-attachments/assets/31ddba0a-1f95-44d4-9c60-6aa22db24681)
 
 ---
 
