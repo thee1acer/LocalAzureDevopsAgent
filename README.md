@@ -6,7 +6,7 @@ This project implements a local Azure DevOps agent that replicates the behavior 
 
 The solution uses a Docker container running a Linux image of the Azure DevOps agent, sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases). This approach is perfect for testing local and development builds before creating pull requests or merging to master branches.
 
-The initial implementation was developed in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Self-Hosted%20Azure%20Devops%20Agent)
+The initial implementation was developed in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent)
 
 ## Features
 
@@ -101,7 +101,6 @@ The initial implementation was developed in Azure DevOps. You can view the proje
 
 5. **Pipeline Execution**  
    Once set up, the pipeline will automatically trigger and run the local Azure DevOps agent for commits on local branches.
-
 
 ** See **
 ![image](https://github.com/user-attachments/assets/955e1d0d-08c8-4b22-a07e-2fdf066fea53)
