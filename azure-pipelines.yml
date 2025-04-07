@@ -5,7 +5,7 @@ trigger:
       - "*"
 
 variables:
-  poolName: $[iif(eq(variables['Build.SourceBranchName'], 'refs/heads/master'), 'Azure Pipelines', 'Local Azure Agent')]
+  poolName: $[iif(eq(Build.SourceBranchName, 'master'), 'Azure Pipelines', 'Local Azure Agent')]
 
 pool:
   name: $(poolName)
