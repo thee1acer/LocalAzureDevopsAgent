@@ -85,25 +85,18 @@ The initial implementation of this solution was created in Azure DevOps. You can
 
 ## Usage
 
-Provide instructions on how to use the project.
 
-### Example
-
-1. Start the application:
+### Starting the devops agent
 
    ```bash
-   npm start
+   docker-compose up ubuntu-agent
    ```
 
-2. Go to `http://localhost:3000` in your browser to see the app in action.
-
-### Example Command-Line Usage
-
-```bash
-# Example for a command-line tool
-./mytool --option value
-```
-
+### Listening for jobs
+  Once the agent is up and running it should look like this
+  
+  ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
+  
 ---
 
 ## Contributing
@@ -117,21 +110,8 @@ We welcome contributions to this project! To contribute:
 5. Push to your branch (`git push origin feature-branch`).
 6. Create a pull request.
 
-### Code of Conduct
-
-Please follow our [Code of Conduct](link_to_code_of_conduct) when contributing.
-
----
-
 ## Acknowledgments
 
 - List any third-party resources, libraries, or tools that were used.
 
-  ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
 
-- Inspiration or credit for ideas.
-
-Example:
-- **Node.js** – Used for the backend server.
-- **Docker** – Containerization of the application.
-- **Special thanks to [Contributor Name]** for their contributions.
