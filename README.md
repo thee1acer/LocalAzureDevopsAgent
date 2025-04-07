@@ -3,8 +3,8 @@
 
 ## Description
 
-> This project is a local Azure DevOps agent that replicates the behavior of a cloud-hosted Azure DevOps agent, allowing you to run pipelines locally for testing and development purposes.
-The solution is implemented using a Docker container that runs a Linux image of the Azure DevOps agent. The agent image is sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases).
+> This project is a Local Azure DevOps agent that replicates the behavior of a cloud-hosted Azure DevOps agent, allowing you to run pipelines locally for testing and development purposes.
+The solution is implemented using a Docker container that runs a Linux image of the Azure DevOps agent. The agent image is sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases). This implementation can be added to your project for testing local/ development builds before creating prs and merging to master branches.
 The initial implementation of this solution was created in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent).
 
 ## Features
@@ -22,8 +22,7 @@ The initial implementation of this solution was created in Azure DevOps. You can
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [Installation and Usage](#installation)
 - [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
 
@@ -74,27 +73,15 @@ The initial implementation of this solution was created in Azure DevOps. You can
          - master
          - "*"
      ```
-     > For our pipeline to dynamically select the agent pool to run when trigger we need to set
+     > For our pipeline to dynamically select the agent pool to run when triggered we need to set
      ```bash
        variables:
-       poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
+         poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
+
+       pool:
+         name: $(poolName)
      ```
 3. Now the pipeline will be triggered and run the local azure agent whenever we commit on our local branches
-
----
-
-## Usage
-
-
-### Starting the devops agent
-
-   ```bash
-   docker-compose up ubuntu-agent
-   ```
-
-### Listening for jobs
-  Once the agent is up and running it should look like this
-  
   ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
   
 ---
@@ -112,6 +99,6 @@ We welcome contributions to this project! To contribute:
 
 ## Acknowledgments
 
-- List any third-party resources, libraries, or tools that were used.
+- [Microsoft Azure Agent Images](https://github.com/microsoft/azure-pipelines-agent/releases)
 
 
