@@ -25,44 +25,46 @@ The initial implementation of this solution was created in Azure DevOps. You can
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 - [Acknowledgments](#acknowledgments)
 
 ## Installation
 
 ### Prerequisites
 
-- List any software or tools required (e.g., Node.js, Docker, etc.).
+- ```Git```: To clone repo and interact with source control.
+- ```Docker```: To run the agent that is deployed in a docker container.
+- ```VS Code (Recommended, Not Required)```
+- ```Azure DevOps Account```
+- ```Personal Access Token (will show how to set this up)```: So that the agent can interact with the cloud environment
+- ```Agent Pool Setup```: This is to just ensure that our agent is going to run on a custom pool.
 
-```bash
-# Example:
-Node.js >= 14
-Docker >= 20
-```
+### Steps (assuming you want to add this local agent to your existing azure devops repo)
 
-### Steps
+1. ```Clone the repository```: git clone https://github.com/thee1acer/LocalAzureDevopsAgent.git (not necessary)
+2. ```Docker Container Setup```:
+   - Copy docker container definition into your docker-compose yml file.
+   
+   - Copy docker-scripts folder into the root of your project. Ensure that the scripts have unix line endings. Easiest way to check this is if you open a .sh script in notepad++ it should show this at the bottom right corner ![image](https://github.com/user-attachments/assets/7e2843f6-5b94-4957-b9db-5b3fcef1ea98).
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git
-   cd YOUR_PROJECT_NAME
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-   Or, if you're using another package manager:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Setup any necessary environment variables or configuration files.
-
+   - In your terminal you should run ```docker-compose up ubuntu agent ```. If prompted to accept terms and conditions of the agent enter 'Y'. If asked for type of authentication hit enter for PAT.
+   - Enter PAT and wait for connection
+4. ```Trigger pipeline on commits```:
+   - For this step we need to change a small portion of our release pipeline.
+     > For pipeline build trigger you need to add:
+     
+     `bash
+     trigger:
+      branches:
+       include:
+         - master
+         - "*"
+     `
+     > For our pipeline to dynamically select the agent pool to run when trigger we need to set
+     `
+       variables:
+       poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
+     `
+3. Now the pipeline will be triggered once
 ---
 
 ## Usage
@@ -102,12 +104,6 @@ We welcome contributions to this project! To contribute:
 ### Code of Conduct
 
 Please follow our [Code of Conduct](link_to_code_of_conduct) when contributing.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ---
 
