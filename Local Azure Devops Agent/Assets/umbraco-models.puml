@@ -1,423 +1,51 @@
 @startuml
+!define RECTANGLE class
 
-class Article {
-  Umbraco.TextBox Title
-  Umbraco.TinyMCE Body
-  Umbraco.MediaPicker3 Image
-  Umbraco.MediaPicker3 MobileImage
-  Umbraco.TextBox ImageAltText
-  Umbraco.DropDown.Flexible Imageposition
-  Umbraco.DropDown.Flexible Imagemobileposition
-  Umbraco.ColorPicker Articlebackgroundcolour
-  Title Title
-  Body Body
-  Image Image
-  MobileImage MobileImage
-  ImageAltText ImageAltText
-  Imageposition Imageposition
-  Imagemobileposition Imagemobileposition
-  Articlebackgroundcolour Articlebackgroundcolour
+' Define tables as classes
+class Customers {
+    + customer_id: int
+    + first_name: string
+    + last_name: string
+    + email: string
+    + phone: string
 }
 
-class ArticleCard {
-  Umbraco.TextBox ArticlePreviewTitle
-  Umbraco.TextArea ArticlePreviewSummary
-  Umbraco.MediaPicker3 ArticlePreviewImage
-  Umbraco.TextBox ArticlePreviewImageAltText
-  ArticlePreviewTitle ArticlePreviewTitle
-  ArticlePreviewSummary ArticlePreviewSummary
-  ArticlePreviewImage ArticlePreviewImage
-  ArticlePreviewImageAltText ArticlePreviewImageAltText
+class Orders {
+    + order_id: int
+    + order_date: datetime
+    + total_amount: decimal
+    + customer_id: int
 }
 
-class ArticlePage {
-  Umbraco.TextBox SharePromptText
-  Umbraco.TinyMCE Article
-  ArticlePreviewTitle ArticlePreviewTitle
-  ArticlePreviewSummary ArticlePreviewSummary
-  ArticlePreviewImage ArticlePreviewImage
-  ArticlePreviewImageAltText ArticlePreviewImageAltText
-  SharePromptText SharePromptText
-  Article Article
+class Products {
+    + product_id: int
+    + name: string
+    + price: decimal
+    + category_id: int
 }
 
-class ArticlesPage {
-  Slides Slides
+class Categories {
+    + category_id: int
+    + category_name: string
 }
 
-class ArticleTab {
-  Umbraco.TextBox Title
-  Umbraco.TextBox Subtitle
-  Article Article
-  Title Title
-  Subtitle Subtitle
-  Articles Articles
+class Payments {
+    + payment_id: int
+    + payment_date: datetime
+    + order_id: int
+    + amount: decimal
+    + payment_method: string
 }
 
-class ArticleTabList {
-  ArticleTab ArticleTab
-  TabItems TabItems
-}
+' Relationships between tables
+Customers "1" -- "0..*" Orders : places
+Orders "1" -- "0..*" Products : contains
+Products "1" -- "0..1" Categories : belongs to
+Orders "1" -- "0..*" Payments : paid by
 
-class ColumnedHeadingLayout {
-  HeadingImageCard HeadingImageCard
-  FuelWidget FuelWidget
-  ColumnedSectionItems ColumnedSectionItems
-}
-
-class ContactDetails {
-  Umbraco.TextBox Title
-  Umbraco.TextBox Subtitle
-  Umbraco.ColorPicker BackgroundColour
-  Umbraco.TextBox AddressLine1
-  Umbraco.TextBox AddressLine2
-  Umbraco.TextBox City
-  Umbraco.TextBox Province/State
-  Umbraco.TextBox TelephoneLabel
-  Umbraco.TextBox TelephoneNumber
-  Umbraco.TextBox BusinessEmailLabel
-  Umbraco.EmailAddress BusinessEmail
-  Umbraco.TextBox WebsiteUrl
-  SocialMedia SocialMedia
-  Title Title
-  Subtitle Subtitle
-  BackgroundColour BackgroundColour
-  AddressLine1 AddressLine1
-  AddressLine2 AddressLine2
-  City City
-  Province/State Province/State
-  TelephoneLabel TelephoneLabel
-  TelephoneNumber TelephoneNumber
-  BusinessEmailLabel BusinessEmailLabel
-  BusinessEmail BusinessEmail
-  WebsiteUrl WebsiteUrl
-  Socialmedia Socialmedia
-}
-
-class ContactForm {
-  Umbraco.ColorPicker BackgroundColour
-  UmbracoForms.FormPicker MacroForm
-  BackgroundColour BackgroundColour
-  MacroForm MacroForm
-}
-
-class ContactUsPage {
-  ContactDetails ContactDetails
-  ContactForm ContactForm
-  Umbraco.TextBox LocationTitle
-  Umbraco.TextBox MapId
-  Our.Umbraco.GMaps GoogleMap
-  HeaderBannerTitle HeaderBannerTitle
-  TextColour TextColour
-  HeaderBannerImage HeaderBannerImage
-  HeaderBannerMobileImage HeaderBannerMobileImage
-  HeaderBannerImageAltText HeaderBannerImageAltText
-  Overlay Overlay
-  OverlayColour OverlayColour
-  Contacts Contacts
-  LocationTitle LocationTitle
-  MapId MapId
-  GoogleMap GoogleMap
-}
-
-class ContentPage {
-  Article Article
-  LogoList LogoList
-  VideoPlayer VideoPlayer
-  ImageMedia ImageMedia
-  ArticleTabList ArticleTabList
-  SideBySideArticles SideBySideArticles
-  ContactForm ContactForm
-  Slides Slides
-  Pagecomponents Pagecomponents
-}
-
-class FuelPrice {
-  Umbraco.DropDown.Flexible Type
-  Umbraco.TextBox Province
-  Umbraco.TextBox Price
-  Type Type
-  Province Province
-  Price Price
-}
-
-class FuelWidget {
-  Umbraco.TextBox Title
-  Umbraco.MultiUrlPicker Url
-  Umbraco.TextBox FuelPriceTitle
-  FuelPrice FuelPrice
-  Umbraco.TextBox NoFuelPricesAvailableMessage
-  Umbraco.ColorPicker AdvertContentTextColor
-  Umbraco.ColorPicker AdvertContentBackgroundColor
-  Umbraco.TinyMCE AdvertContent
-  Title Title
-  Url Url
-  FuelPriceTitle FuelPriceTitle
-  FuelPrices FuelPrices
-  NoFuelPricesAvailableMessage NoFuelPricesAvailableMessage
-  AdvertContentTextColor AdvertContentTextColor
-  AdvertContentBackgroundColor AdvertContentBackgroundColor
-  AdvertContent AdvertContent
-}
-
-class HeaderBanner {
-  Umbraco.TextBox HeaderBannerTitle
-  Umbraco.ColorPicker TextColour
-  Umbraco.MediaPicker3 HeaderBannerImage
-  Umbraco.MediaPicker3 HeaderBannerMobileImage
-  Umbraco.TextBox HeaderBannerImageAltText
-  Umbraco.TrueFalse Overlay
-  Umbraco.ColorPicker OverlayColour
-  HeaderBannerTitle HeaderBannerTitle
-  TextColour TextColour
-  HeaderBannerImage HeaderBannerImage
-  HeaderBannerMobileImage HeaderBannerMobileImage
-  HeaderBannerImageAltText HeaderBannerImageAltText
-  Overlay Overlay
-  OverlayColour OverlayColour
-}
-
-class HeadingImageCard {
-  Umbraco.TextBox Title
-  Umbraco.MediaPicker3 Image
-  Umbraco.TextBox ImageAltText
-  Umbraco.MultiUrlPicker Url
-  Title Title
-  Image Image
-  ImageAltText ImageAltText
-  Url Url
-}
-
-class HeroBanner {
-  Slide Slide
-  Slides Slides
-}
-
-class ImageMedia {
-  Umbraco.MediaPicker3 Media
-  Umbraco.MediaPicker3 MobileMedia
-  Umbraco.TextBox AltText
-  Umbraco.TextBox Height
-  Umbraco.TextBox Width
-  Umbraco.ColorPicker BackgroundColour
-  Umbraco.DropDown.Flexible Position
-  Umbraco.DropDown.Flexible TopSpace
-  Umbraco.DropDown.Flexible BottomSpace
-  Umbraco.DropDown.Flexible LeftSpace
-  Umbraco.DropDown.Flexible RightSpace
-  Media Media
-  MobileMedia MobileMedia
-  AltText AltText
-  Height Height
-  Width Width
-  BackgroundColour BackgroundColour
-  Position Position
-  TopSpace TopSpace
-  BottomSpace BottomSpace
-  LeftSpace LeftSpace
-  RightSpace RightSpace
-}
-
-class LogoItem {
-  Umbraco.TextBox CompanyName
-  Umbraco.TextBox CompanyURL
-  Umbraco.MediaPicker3 CompanyLogo
-  CompanyName CompanyName
-  CompanyURL CompanyURL
-  CompanyLogo CompanyLogo
-}
-
-class LogoList {
-  Umbraco.ColorPicker BackgroundColour
-  LogoItem LogoItem
-  Umbraco.TextBox Title
-  BackgroundColour BackgroundColour
-  Logos Logos
-  Title Title
-}
-
-class Navigation {
-  NavigationGroup NavigationGroup
-}
-
-class NavigationItem {
-  Umbraco.TextBox Label
-  Umbraco.MultiUrlPicker Url
-  Umbraco.MultiUrlPicker Submenu
-  Label Label
-  Url Url
-  Submenu Submenu
-}
-
-class SearchPage {
-  Umbraco.Integer Searchpagesize
-  HeaderBannerTitle HeaderBannerTitle
-  TextColour TextColour
-  HeaderBannerImage HeaderBannerImage
-  HeaderBannerMobileImage HeaderBannerMobileImage
-  HeaderBannerImageAltText HeaderBannerImageAltText
-  Overlay Overlay
-  OverlayColour OverlayColour
-  Searchpagesize Searchpagesize
-}
-
-class SideBySideArticles {
-  Umbraco.TextBox FirstTitle
-  Umbraco.TinyMCE FirstBody
-  Umbraco.ColorPicker FirstBackgroundColour
-  Umbraco.TextBox SecondTitle
-  Umbraco.TinyMCE SecondBody
-  Umbraco.ColorPicker SecondBackgroundColour
-  FirstTitle FirstTitle
-  FirstBody FirstBody
-  FirstBackgroundColour FirstBackgroundColour
-  SecondTitle SecondTitle
-  SecondBody SecondBody
-  SecondBackgroundColour SecondBackgroundColour
-}
-
-class SiteRoot {
-  Article Article
-  LogoList LogoList
-  VideoPlayer VideoPlayer
-  ImageMedia ImageMedia
-  ArticleTabList ArticleTabList
-  SideBySideArticles SideBySideArticles
-  ContactForm ContactForm
-  Umbraco.TextBox CountryCode
-  Umbraco.TextBox Copyrighttext
-  Umbraco.TextBox Currency
-  Umbraco.DropDown.Flexible CurrencyPosition
-  Umbraco.TextBox GoogleAnalyticsPropertyId
-  NavigationItem NavigationItem
-  NavigationItem NavigationItem
-  NavigationItem NavigationItem
-  SocialMedia SocialMedia
-  Umbraco.TextBox CustomerServiceTelephoneNumber
-  Umbraco.EmailAddress BusinessEnquiryEmail
-  Umbraco.TrueFalse Searchenabled
-  Umbraco.MultiUrlPicker Searchpage
-  ColumnedSectionItems ColumnedSectionItems
-  Slides Slides
-  PageComponents PageComponents
-  CountryCode CountryCode
-  Copyrighttext Copyrighttext
-  Currency Currency
-  CurrencyPosition CurrencyPosition
-  GoogleAnalyticsPropertyId GoogleAnalyticsPropertyId
-  SideMenuNavigationItems SideMenuNavigationItems
-  QuickLinks QuickLinks
-  FooterNavigationItems FooterNavigationItems
-  SocialMedia SocialMedia
-  CustomerServiceTelephoneNumber CustomerServiceTelephoneNumber
-  BusinessEnquiryEmail BusinessEnquiryEmail
-  Searchenabled Searchenabled
-  Searchpage Searchpage
-}
-
-class Slide {
-  Umbraco.TextBox Title
-  Umbraco.ColorPicker TextColour
-  Umbraco.TextArea Subtitle
-  Umbraco.MultiUrlPicker Url
-  Umbraco.MediaPicker3 Image
-  Umbraco.MediaPicker3 MobileImage
-  Umbraco.TextBox ImageAltText
-  Umbraco.TrueFalse Overlay
-  Umbraco.ColorPicker OverlayColour
-  Title Title
-  TextColour TextColour
-  Subtitle Subtitle
-  Url Url
-  Image Image
-  MobileImage MobileImage
-  ImageAltText ImageAltText
-  Overlay Overlay
-  OverlayColour OverlayColour
-}
-
-class SocialMedia {
-  Umbraco.MediaPicker3 Socialmediaicon
-  Umbraco.TextBox Socialmedialabel
-  Umbraco.MultiUrlPicker Url
-  Socialmediaicon Socialmediaicon
-  Socialmedialabel Socialmedialabel
-  Url Url
-}
-
-class StationLocatorPage {
-  Umbraco.TextBox MapId
-  Umbraco.Integer DefaultZoom
-  Our.Umbraco.GMaps GoogleMap
-  HeaderBannerTitle HeaderBannerTitle
-  TextColour TextColour
-  HeaderBannerImage HeaderBannerImage
-  HeaderBannerMobileImage HeaderBannerMobileImage
-  HeaderBannerImageAltText HeaderBannerImageAltText
-  Overlay Overlay
-  OverlayColour OverlayColour
-  MapId MapId
-  DefaultZoom DefaultZoom
-  GoogleMap GoogleMap
-}
-
-class VideoPlayer {
-  Umbraco.MediaPicker3 Video
-  Umbraco.TextBox Notsupportedmessage
-  Umbraco.TextBox Height
-  Umbraco.TextBox Width
-  Umbraco.ColorPicker BackgroundColour
-  Umbraco.DropDown.Flexible Position
-  Umbraco.DropDown.Flexible TopSpace
-  Umbraco.DropDown.Flexible BottomSpace
-  Umbraco.DropDown.Flexible LeftSpace
-  Umbraco.DropDown.Flexible RightSpace
-  Video Video
-  Notsupportedmessage Notsupportedmessage
-  Height Height
-  Width Width
-  BackgroundColour BackgroundColour
-  Position Position
-  TopSpace TopSpace
-  BottomSpace BottomSpace
-  LeftSpace LeftSpace
-  RightSpace RightSpace
-}
-
-Article --> Image
-ArticlePage --> Article
-ArticleTab --> Article
-ArticleTabList --> ArticleTab
-ColumnedHeadingLayout --> HeadingImageCard
-ColumnedHeadingLayout --> FuelWidget
-ContactDetails --> SocialMedia
-ContactDetails --> Socialmedia
-ContactUsPage --> ContactDetails
-ContactUsPage --> ContactForm
-ContentPage --> Article
-ContentPage --> LogoList
-ContentPage --> VideoPlayer
-ContentPage --> ImageMedia
-ContentPage --> ArticleTabList
-ContentPage --> SideBySideArticles
-ContentPage --> ContactForm
-FuelWidget --> FuelPrice
-HeadingImageCard --> Image
-HeroBanner --> Slide
-LogoList --> LogoItem
-SiteRoot --> Article
-SiteRoot --> LogoList
-SiteRoot --> VideoPlayer
-SiteRoot --> ImageMedia
-SiteRoot --> ArticleTabList
-SiteRoot --> SideBySideArticles
-SiteRoot --> ContactForm
-SiteRoot --> NavigationItem
-SiteRoot --> NavigationItem
-SiteRoot --> NavigationItem
-SiteRoot --> SocialMedia
-SiteRoot --> SocialMedia
-SiteRoot --> Searchpage
-Slide --> Image
+' Optional: Indicating foreign keys for clarity
+Orders : customer_id
+Products : category_id
+Payments : order_id
 
 @enduml

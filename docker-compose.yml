@@ -1,28 +1,4 @@
 services:
-  webapi:
-    image: webapi:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-      - "5001:5001"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-    depends_on:
-      - db
-
-  db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
-    restart: always
-    ports:
-      - "1433:1433"
-    environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
-      ACCEPT_EULA: "Y"
-
   ubuntu-agent:
     image: ubuntu:latest
     container_name: ubuntu-agent
@@ -31,6 +7,7 @@ services:
       - .:/workspace
       - ./docker-scripts/ubuntu-agent/install-agent.sh:/install-agent.sh
       - agent-data:/home/ubuntu/agent
+      - /var/run/docker.sock:/var/run/docker.sock
     stdin_open: true
     tty: true
     environment:
@@ -38,15 +15,9 @@ services:
       - AZURE_PERSONAL_TOKEN=${AZURE_PERSONAL_TOKEN}
       - AZURE_AGENT_POOL=${AZURE_AGENT_POOL}
       - AZURE_COMPANY_URL=${AZURE_COMPANY_URL}
-      - AZP_AGENT_DOWNGRADE_DISABLED=true
-    entrypoint:
-      [
-        "/bin/bash",
-        "-c",
-        "/install-agent.sh && /home/ubuntu/agent/bin/Agent.Listener run"
-      ]
+    entrypoint: ["/bin/bash", "-c", "/install-agent.sh && tail -f /dev/null"]
     user: "root"
     privileged: true
 
 volumes:
-  ubuntu-data:
+  agent-data:
