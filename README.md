@@ -1,24 +1,28 @@
-
-# Local Azure Devops Agent
+# Local Azure DevOps Agent
 
 ## Description
 
-> This project is a Local Azure DevOps agent that replicates the behavior of a cloud-hosted Azure DevOps agent, allowing you to run pipelines locally for testing and development purposes.
-The solution is implemented using a Docker container that runs a Linux image of the Azure DevOps agent. The agent image is sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases). This implementation can be added to your project for testing local/ development builds before creating prs and merging to master branches.
-The initial implementation of this solution was created in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent).
+This project implements a local Azure DevOps agent that replicates the behavior of a cloud-hosted agent. It allows you to run Azure DevOps pipelines locally, enabling faster testing and development without relying on cloud infrastructure.
+
+The solution uses a Docker container running a Linux image of the Azure DevOps agent, sourced from Microsoft's [Azure Pipelines Agent Releases](https://github.com/microsoft/azure-pipelines-agent/releases). This approach is perfect for testing local and development builds before creating pull requests or merging to master branches.
+
+The initial implementation was developed in Azure DevOps. You can view the project here: [Local Azure DevOps Agent on Azure DevOps](https://dev.azure.com/32302916/Local%20Azure%20Devops%20Agent).
 
 ## Features
 
-- Run Azure DevOps Pipelines Locally:
-  > Replicate the behavior of a cloud-hosted Azure DevOps agent on your local machine, allowing you to run and test pipelines locally without needing to rely on cloud infrastructure. This is ideal for testing, debugging, and developing without waiting for cloud execution times.
-- Trigger Pipelines on Feature Branches:
-  > Automatically trigger pipeline runs for commits on feature branches (any branch except the master branch), enabling more granular testing of new features or bug fixes before merging them into the main codebase.
-- Flexible and Customizable Solution:
-  > The Docker container can be easily adjusted to use different images or configurations, allowing you to tailor the solution for specific environments or use cases.
-- Scalable for Various Environments:
-  > The solution can be scaled to different environments or teams, making it suitable for both small-scale projects and larger enterprise setups, ensuring flexibility in CI/CD workflows.
-- Seamless Integration with Azure DevOps:
-  > Direct integration with Azure DevOps allows for smooth connectivity and operation within your existing DevOps pipelines, minimizing setup complexity and streamlining the process.
+- **Run Azure DevOps Pipelines Locally**:  
+  Replicates the behavior of a cloud-hosted Azure DevOps agent, enabling you to test pipelines locally without relying on cloud execution times. This is ideal for testing, debugging, and development.
+- **Trigger Pipelines on Feature Branches**:  
+  Automatically trigger pipeline runs for commits on feature branches (any branch except master). This allows for granular testing of new features or bug fixes before merging into the main codebase.
+
+- **Flexible and Customizable Solution**:  
+  The Docker container can be easily customized to use different images or configurations, providing flexibility for various environments or use cases.
+
+- **Scalable for Various Environments**:  
+  Suitable for small projects or large enterprise setups, the solution scales to different environments and teams, ensuring flexibility in CI/CD workflows.
+
+- **Seamless Integration with Azure DevOps**:  
+  The agent integrates smoothly with Azure DevOps, minimizing setup complexity and enhancing your CI/CD pipelines.
 
 ## Table of Contents
 
@@ -30,60 +34,76 @@ The initial implementation of this solution was created in Azure DevOps. You can
 
 ### Prerequisites
 
-- ```Git```: To clone repo and interact with source control.
-- ```Docker```: To run the agent that is deployed in a docker container.
-- ```VS Code (Recommended, Not Required)```
-- ```Azure DevOps Account and Project```:  This is going to be used within a project
-- ```Personal Access Token (will show how to set this up)```: So that the agent can interact with the cloud environment
-- ```Agent Pool Setup```: This is to just ensure that our agent is going to run on a custom pool.
+- **Git**: To clone the repository and interact with source control.
+- **Docker**: To run the agent in a Docker container.
+- **VS Code (Recommended)**: For easy project management (optional).
+- **Azure DevOps Account and Project**: Necessary for integrating with your DevOps project.
+- **Personal Access Token (PAT)**: Required for the agent to authenticate with your Azure DevOps project.
+- **Agent Pool Setup**: To assign the agent to a custom pool.
 
-### Steps (assuming you want to add this local agent to your existing azure devops repo)
+### Setup Steps (for adding the local agent to your Azure DevOps repository)
 
-1. ```Clone the repository```: git clone https://github.com/thee1acer/LocalAzureDevopsAgent.git (not necessary)
-2. ```Setting up Azure Devops Pool and Personal access token (PAT) and configuration file```:
-   - Setting up Azure Devops Pool:
-     > In your Azure Devops Project navigate to Project Settings > Agent Pools ![image](https://github.com/user-attachments/assets/a1f4ddb5-9281-4b9f-848b-205b0077739c) and add self hosted agent, see [Azure Devops Self Hosted Agent'](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops&tabs=IP-V4) We are going to need this name so keep it safe.
+1. **Clone the Repository**  
+   Clone the repository:  
+   `git clone https://github.com/thee1acer/LocalAzureDevopsAgent.git`  
+   _(Note: This is optional if you already have the repository.)_
 
-   - Personal Access Token (PAT)
-     > In your Azure Devops Project naviagte to user settings ![image](https://github.com/user-attachments/assets/2655bf97-6ea3-4a23-954a-c5857c4ef2a0) and navogate to ```personal access tokens``` >> Add new token >>  Assign rights >> Copy token generated because it is not saved and keep it safe
+2. **Set Up Azure DevOps Pool and Personal Access Token (PAT)**
 
-   - Configuration file:
-      > In your project root folder add a .env file that has fields:
-      ```bash
-        # Here is an example
-        AZURE_PERSONAL_TOKEN="---------------------"
-        AZURE_AGENT_POOL="Local Azure Agent" #depends on what you called the agent pool you created
-        AZURE_COMPANY_URL="https://dev.azure.com/32302916" # this is just a link to you devops project not the repo
-      ```
-4. ```Docker Container Setup```:
-   - Copy docker container definition into your docker-compose yml file.
-   
-   - Copy docker-scripts folder into the root of your project. Ensure that the scripts have unix line endings. Easiest way to check this is if you open a .sh script in notepad++ it should show this at the bottom right corner ![image](https://github.com/user-attachments/assets/7e2843f6-5b94-4957-b9db-5b3fcef1ea98).
+   - **Agent Pool Setup**:  
+     In your Azure DevOps project, navigate to **Project Settings > Agent Pools** and add a self-hosted agent. Follow the [Azure DevOps Agent Setup Documentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops&tabs=IP-V4). Keep track of the agent pool name, as it will be needed later.
 
-   - In your terminal you should run ```docker-compose up ubuntu agent ```. If prompted to accept terms and conditions of the agent enter 'Y'. If asked for type of authentication hit enter for PAT.
-   - Enter PAT and wait for connection
-5. ```Trigger pipeline on commits```:
-   - For this step we need to change a small portion of our release pipeline.
-     > For pipeline build trigger you need to add:
-     
+   - **Create Personal Access Token (PAT)**:  
+     Go to **User Settings** > **Personal Access Tokens** > **Add New Token**. Assign the appropriate rights and **copy the generated token** (it will not be saved). Keep it secure for later use.
+
+   - **Configure `.env` File**:  
+     In the root of your project, create a `.env` file with the following fields:
      ```bash
+     AZURE_PERSONAL_TOKEN="your_personal_access_token"
+     AZURE_AGENT_POOL="Local Azure Agent" # Use the name of the agent pool created
+     AZURE_COMPANY_URL="https://dev.azure.com/your_company" # Replace with your Azure DevOps organization URL
+     ```
+
+3. **Docker Container Setup**
+
+   - Copy the Docker container definition into your `docker-compose.yml` file.
+   - Copy the `docker-scripts` folder into the root of your project. Ensure the scripts use Unix line endings (check with Notepad++).
+   - In your terminal, run:  
+     `docker-compose up ubuntu agent`  
+     Accept the agent terms and conditions when prompted. When asked for the authentication type, press **Enter** to select **PAT**. Paste your PAT and wait for the connection to complete.
+
+4. **Trigger Pipelines on Commits**  
+   To trigger pipelines on commits, modify your pipeline’s configuration as follows:
+
+   - **Update the Build Trigger**:
+     Add the following to your pipeline YAML file to trigger builds on feature branches:
+
+     ```yaml
      trigger:
-      branches:
-       include:
-         - master
-         - "*"
+       branches:
+         include:
+           - master
+           - "*"
      ```
-     > For our pipeline to dynamically select the agent pool to run when triggered we need to set
-     ```bash
-       variables:
-         poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
 
-       pool:
-         name: $(poolName)
+   - **Dynamically Select Agent Pool**:
+     Update the pipeline YAML to dynamically choose the agent pool based on the branch name:
+
+     ```yaml
+     variables:
+       poolName: $[iif(eq(variables['Build.SourceBranchName'], 'master'), 'Azure Pipelines', 'Local Azure Agent')]
+
+     pool:
+       name: $(poolName)
      ```
-3. Now the pipeline will be triggered and run the local azure agent whenever we commit on our local branches
-  ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
-  
+
+     This setup ensures that the pipeline runs on the local agent for feature branches and the Azure Pipelines agent for the master branch.
+
+5. **Pipeline Execution**  
+   Once set up, the pipeline will automatically trigger and run the local Azure DevOps agent for commits on local branches.
+
+   ![image](https://github.com/user-attachments/assets/da6e58e0-b3c3-4cac-abf9-d59a38a02c9c)
+
 ---
 
 ## Contributing
@@ -100,5 +120,3 @@ We welcome contributions to this project! To contribute:
 ## Acknowledgments
 
 - [Microsoft Azure Agent Images](https://github.com/microsoft/azure-pipelines-agent/releases)
-
-
